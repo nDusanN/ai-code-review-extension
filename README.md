@@ -1,71 +1,114 @@
-# ai-code-review-extension README
+# AI Code Review Assistant (VS Code Extension)
 
-This is the README for your extension "ai-code-review-extension". After writing up a brief description, we recommend including the following sections.
-
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+VS Code extension that provides **structured AI-powered Python code review** using a locally hosted LLM via Ollama. The system is designed for **educational use and research in automated code evaluation techniques**.
 
 ---
 
-## Following extension guidelines
+## Overview
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+This project implements a lightweight code review assistant inside VS Code that analyzes selected Python code and returns structured feedback in JSON format. The model runs locally through **Ollama**, enabling reproducible experiments and controlled evaluation setups.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+The tool is part of an academic thesis focused on **LLM-based code understanding and evaluation strategies**.
 
-## Working with Markdown
+---
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## Key Features
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+- AI-powered Python code review directly inside VS Code
+- Structured JSON output (no free-form text)
+- Local inference using Ollama (no external API dependency)
+- Webview-based review visualization
+- Strict prompt engineering for deterministic evaluation format
+- Lightweight and extensible architecture
 
-## For more information
+---
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+## Architecture
 
-**Enjoy!**
+- **Frontend:** VS Code Extension API (TypeScript)
+- **Model runtime:** Ollama (local LLM inference)
+- **Model used:** `llama3` (configurable)
+- **Transport:** HTTP request to local Ollama server
+- **Output:** Structured JSON parsed + rendered in Webview
+
+---
+
+## Workflow
+
+1. User selects Python code in editor
+2. Command `ai-code-review.reviewCode` is triggered
+3. Selected code is embedded into a structured evaluation prompt
+4. Prompt is sent to local Ollama endpoint
+5. Model returns strict JSON response
+6. Extension parses output and renders structured feedback UI
+
+---
+
+## Output Schema
+
+The model is constrained to return:
+
+```json
+{
+  "correctness_issues": [],
+  "edge_cases": [],
+  "code_quality": {
+    "readability": "",
+    "structure": ""
+  },
+  "complexity": {
+    "time": "",
+    "space": ""
+  },
+  "final_verdict": ""
+}
+
+
+## Research Context (Thesis Component)
+
+This project is designed as part of an academic thesis exploring:
+
+### 1. Prompt Engineering Strategies
+- Zero-shot vs few-shot prompting
+- Role-based evaluation prompting
+- Structured output enforcement (JSON constraints)
+
+### 2. Code Analysis Approaches
+- Prompt-only reasoning vs hybrid static-analysis + prompt input
+- Error detection reliability across different prompt designs
+
+### 3. Model Behavior Evaluation
+- Consistency of small LLMs (e.g. Llama 3 small variants)
+- Sensitivity to prompt structure
+- Robustness of structured outputs under constrained decoding
+
+### 4. Local LLM Deployment
+- Offline inference using Ollama
+- Reproducibility of experiments without API variability
+
+---
+
+## Technical Constraints
+
+- Requires Ollama running locally  
+- Default endpoint:http://localhost:11434/api/generate
+- Model:llama3
+- Requires VS Code API environment
+
+---
+
+## Limitations
+
+- Model output is not guaranteed to always be valid JSON (handled via parsing fallback)
+- Performance depends on local hardware
+- No semantic execution of Python code (static analysis only through LLM reasoning)
+
+---
+
+## Future Improvements
+
+- Integration with AST-based static analysis tools (e.g. `ast`, `pylint`)
+- Multi-model comparison framework
+- Fine-grained rubric scoring system
+- Dataset logging for research evaluation
+- Support for multiple programming languages
