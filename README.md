@@ -42,28 +42,6 @@ The tool is part of an academic thesis focused on **LLM-based code understanding
 5. Model returns strict JSON response
 6. Extension parses output and renders structured feedback UI
 
----
-
-## Output Schema
-
-The model is constrained to return:
-
-```json
-{
-  "correctness_issues": [],
-  "edge_cases": [],
-  "code_quality": {
-    "readability": "",
-    "structure": ""
-  },
-  "complexity": {
-    "time": "",
-    "space": ""
-  },
-  "final_verdict": ""
-}
-
-
 ## Research Context (Thesis Component)
 
 This project is designed as part of an academic thesis exploring:
@@ -112,3 +90,25 @@ This project is designed as part of an academic thesis exploring:
 - Fine-grained rubric scoring system
 - Dataset logging for research evaluation
 - Support for multiple programming languages
+
+
+---
+
+## Output Schema
+
+The model is constrained to return:
+
+```json
+{
+  "correctness_issues": [],
+  "edge_cases": [],
+  "code_quality": {
+    "readability": "",
+    "structure": ""
+  },
+  "complexity": {
+    "time": "",
+    "space": ""
+  },
+  "final_verdict": ""
+}
