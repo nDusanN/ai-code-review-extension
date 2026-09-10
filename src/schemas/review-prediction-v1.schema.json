@@ -1,0 +1,183 @@
+{
+  "$defs": {
+    "PredictionIssueType": {
+      "enum": [
+        "correctness",
+        "runtime",
+        "performance",
+        "security"
+      ],
+      "title": "PredictionIssueType",
+      "type": "string"
+    },
+    "QualityFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 5,
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence": {
+          "minLength": 10,
+          "title": "Evidence",
+          "type": "string"
+        },
+        "finding_type": {
+          "$ref": "#/$defs/QualityFindingType"
+        },
+        "line_end": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line End"
+        },
+        "line_start": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line Start"
+        },
+        "suggestion": {
+          "minLength": 5,
+          "title": "Suggestion",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_type",
+        "description",
+        "evidence",
+        "suggestion"
+      ],
+      "title": "QualityFinding",
+      "type": "object"
+    },
+    "QualityFindingType": {
+      "enum": [
+        "dead_code",
+        "duplication",
+        "excessive_complexity",
+        "excessive_length"
+      ],
+      "title": "QualityFindingType",
+      "type": "string"
+    },
+    "ReviewIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 5,
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence": {
+          "minLength": 10,
+          "title": "Evidence",
+          "type": "string"
+        },
+        "issue_type": {
+          "$ref": "#/$defs/PredictionIssueType"
+        },
+        "line_end": {
+          "minimum": 1,
+          "title": "Line End",
+          "type": "integer"
+        },
+        "line_start": {
+          "minimum": 1,
+          "title": "Line Start",
+          "type": "integer"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "suggestion": {
+          "minLength": 5,
+          "title": "Suggestion",
+          "type": "string"
+        },
+        "trigger": {
+          "anyOf": [
+            {
+              "minLength": 3,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Trigger"
+        }
+      },
+      "required": [
+        "issue_type",
+        "severity",
+        "line_start",
+        "line_end",
+        "description",
+        "evidence",
+        "trigger",
+        "suggestion"
+      ],
+      "title": "ReviewIssue",
+      "type": "object"
+    },
+    "Severity": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "issues": {
+      "items": {
+        "$ref": "#/$defs/ReviewIssue"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "quality_findings": {
+      "items": {
+        "$ref": "#/$defs/QualityFinding"
+      },
+      "title": "Quality Findings",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "review-prediction-v1.0.0",
+      "enum": [
+        "review-prediction-v1.0.0"
+      ],
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "issues",
+    "quality_findings"
+  ],
+  "title": "ReviewResult",
+  "type": "object"
+}

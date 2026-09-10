@@ -16,8 +16,50 @@
       {
         "command": "ai-code-review.reviewCode",
         "title": "AI Code Review"
+      },
+      {
+        "command": "ai-code-review.clearDiagnostics",
+        "title": "AI Code Review: Clear Diagnostics"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "AI Code Review",
+      "properties": {
+        "aiCodeReview.ollamaEndpoint": {
+          "type": "string",
+          "default": "http://127.0.0.1:11434",
+          "scope": "machine",
+          "description": "Base URL of the local Ollama server. The extension appends /api/chat."
+        },
+        "aiCodeReview.model": {
+          "type": "string",
+          "default": "qwen2.5-coder:7b",
+          "scope": "machine",
+          "description": "Ollama model tag used for the review. The model must already be installed."
+        },
+        "aiCodeReview.temperature": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "scope": "machine",
+          "description": "Sampling temperature for the review request."
+        },
+        "aiCodeReview.allowNonLocalEndpoint": {
+          "type": "boolean",
+          "default": false,
+          "scope": "machine",
+          "description": "Allow sending selected source code to a non-loopback endpoint. Local-only privacy no longer applies when enabled."
+        },
+        "aiCodeReview.requestTimeoutMs": {
+          "type": "number",
+          "default": 120000,
+          "minimum": 1000,
+          "scope": "machine",
+          "description": "Timeout in milliseconds for the Ollama chat request."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -31,13 +73,14 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "@types/vscode": "^1.120.0",
-    "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.1.0",
     "eslint": "^9.39.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
+    "ajv": "^8.20.0",
     "axios": "^1.16.1"
   }
 }
